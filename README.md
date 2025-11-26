@@ -89,7 +89,7 @@ mern-assessment/
 - MongoDB (local or Atlas)
 - npm or yarn
 
-### Step 1: Clone or Create Project Structure
+### Clone or Create Project Structure
 
 ```bash
 # Create project directory
@@ -97,7 +97,7 @@ mkdir mern-assessment
 cd mern-assessment
 ```
 
-### Step 2: Backend Setup
+### Backend Setup
 
 ```bash
 # Create and navigate to backend folder
@@ -116,25 +116,3 @@ npm install --save-dev nodemon
 # Create .env file
 touch .env
 ```
-
-Add to `.env`:
-```
-MONGODB_URI=mongodb://localhost:27017/mern-assessment
-JWT_SECRET=your_super_secure_random_secret_key_change_this_in_production
-PORT=5000
-```
-
-**For MongoDB Atlas:**
-```
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/mern-assessment
-```
-
-Update `package.json` scripts:
-```json
-"scripts": {
-  "start": "node server.js",
-  "dev": "nodemon server.js",
-  "seed": "node seed.js"
-}
-```
-## 🏃‍♂️ Running the Application
