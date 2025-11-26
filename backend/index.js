@@ -10,7 +10,12 @@ import productRouter from "./routes/productRoute.js";
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://taskmanager-1-ov4m.onrender.com"],
+    credentials: true,
+  })
+);
 dotenv.config();
 
 await connectDB();

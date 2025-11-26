@@ -24,9 +24,9 @@ function App() {
             <Route
               path="/tasks"
               element={
-                
+                <PrivateRoute>
                   <TaskList />
-               
+                </PrivateRoute>
               }
             />
             <Route
