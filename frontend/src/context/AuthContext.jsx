@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useEffectEvent } from "react";
 import api from "../utils/api";
 import { AuthContext } from "../hooks/useAuth";
 
@@ -6,23 +6,25 @@ export const AuthProvider = ({ children }) => {
   const initialToken = localStorage.getItem("token");
 
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(!!initialToken);
+  const [loading, setLoading] = useState(initialToken);
+
+  const checkAuth = useEffectEvent(async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const { data } = await api.get("/auth/me");
+        setUser(data.user);
+      } catch (error) {
+        console.log(error);
+        localStorage.removeItem("token");
+      }
+    }
+    setLoading(false);
+  });
 
   useEffect(() => {
-    if (!initialToken) return;
-
-    let active = true;
-
-    api
-      .get("/auth/me")
-      .then((res) => active && setUser(res.data.user))
-      .catch(() => localStorage.removeItem("token"))
-      .finally(() => active && setLoading(false));
-
-    return () => {
-      active = false;
-    };
-  }, [initialToken]);
+    checkAuth();
+  }, []);
 
   const login = async (email, password) => {
     const { data } = await api.post("/auth/login", { email, password });
@@ -33,8 +35,12 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (name, email, password) => {
     console.log("reached in context");
-    
-    const { data } = await api.post("/auth/register", { name, email, password });
+
+    const { data } = await api.post("/auth/register", {
+      name,
+      email,
+      password,
+    });
     localStorage.setItem("token", data.token);
     setUser(data.user);
     return data;
